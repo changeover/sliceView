@@ -4,7 +4,7 @@ import ch.fhnw.ima.sliceview.app.ApplicationContext;
 import ch.fhnw.ima.sliceview.present.DrawingPane;
 import javafx.scene.image.Image;
 
-class ImageView extends DrawingPane {
+public class ImageView extends DrawingPane {
     private ApplicationContext applicationContext;
     private double imageX;
     private double imageY;

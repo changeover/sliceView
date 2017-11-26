@@ -1,9 +1,11 @@
 package ch.fhnw.ima.sliceview.app;
 
-import ch.fhnw.ima.sliceview.logic.GridData;
-import ch.fhnw.ima.sliceview.logic.ImageModel;
+import ch.fhnw.ima.sliceview.logic.*;
 import ch.fhnw.ima.sliceview.logic.impl.SimpleGridData;
 import ch.fhnw.ima.sliceview.logic.impl.SimpleImageModel;
+import ch.fhnw.ima.sliceview.logic.impl.SimpleImageViewController;
+import ch.fhnw.ima.sliceview.logic.impl.SimpleSelectionInformation;
+import ch.fhnw.ima.sliceview.present.image.ImageView;
 
 /**
  * This class is the central container for the main data structures and other information that is
@@ -15,12 +17,16 @@ public class ApplicationContext {
     private String name;
     private GridData gridData;
     private ImageModel imageModel;
+    private SelectionInformation selectionInformation;
+    private ImageViewController imageViewController;
+    private ImageView imageView;
 
     public ApplicationContext(String version, String name) {
         this.version = version;
         this.name = name;
         gridData = new SimpleGridData();
         imageModel = new SimpleImageModel(gridData);
+        selectionInformation = new SimpleSelectionInformation(gridData);
     }
 
     public String getVersion() {
@@ -38,5 +44,16 @@ public class ApplicationContext {
     public ImageModel getImageModel() {
         return imageModel;
     }
+    public SelectionInformation getSelectionInformation(){
+        return selectionInformation;
+    }
 
+    public ImageViewController getImageViewController() {
+        return imageViewController;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+        this.imageViewController = new SimpleImageViewController(this,imageView);
+    }
 }
