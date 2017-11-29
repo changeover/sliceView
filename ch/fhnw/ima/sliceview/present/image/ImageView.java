@@ -1,6 +1,8 @@
 package ch.fhnw.ima.sliceview.present.image;
 
 import ch.fhnw.ima.sliceview.app.ApplicationContext;
+import ch.fhnw.ima.sliceview.logic.ImageModel;
+import ch.fhnw.ima.sliceview.logic.ImageModelListener;
 import ch.fhnw.ima.sliceview.present.DrawingPane;
 import javafx.scene.image.Image;
 
@@ -17,7 +19,13 @@ public class ImageView extends DrawingPane {
         imageX = 0;
         imageY = 0;
 
-        applicationContext.getImageModel().addListener(ImageView.this::repaint);
+        applicationContext.getImageModel().addListener(new ImageModelListener() {
+            @Override
+            public void imageModelChanged() {
+                ImageView.this.setVisible(true);
+                ImageView.this.repaint();
+            }
+        });
     }
 
     @Override

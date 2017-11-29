@@ -46,7 +46,12 @@ public class SimpleHistogram implements Histogram {
      * @return number of values in that bin
      */
     public int getBin(int index) {
-        return bins[index];
+        if(index>=0) {
+            return bins[index];
+        }
+        else{
+            return 0;
+        }
     }
 
     /**

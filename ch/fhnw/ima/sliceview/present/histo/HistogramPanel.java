@@ -51,6 +51,7 @@ public class HistogramPanel extends StackPane {
         minTextField.setOnAction(event -> {
             int minValue = Integer.parseInt(minTextField.getText());
             applicationContext.getImageModel().setMin(minValue);
+            applicationContext.getHistogrammController().setMin(minValue);
         });
         controlPanel.getChildren().add(minTextField);
 
@@ -59,10 +60,12 @@ public class HistogramPanel extends StackPane {
         final TextField maxTextField = new TextField();
         maxTextField.setPrefColumnCount(10);
         int max = applicationContext.getImageModel().getMax();
+
         maxTextField.setText(Integer.toString(max));
         maxTextField.setOnAction(event -> {
             int maxValue = Integer.parseInt(maxTextField.getText());
             applicationContext.getImageModel().setMax(maxValue);
+            applicationContext.getHistogrammController().setMax(maxValue);
         });
         controlPanel.getChildren().add(maxTextField);
 
@@ -70,8 +73,10 @@ public class HistogramPanel extends StackPane {
             public void imageModelChanged() {
                 int min = applicationContext.getImageModel().getMin();
                 minTextField.setText(Integer.toString(min));
+                applicationContext.getHistogrammController().setMin(min);
                 int max = applicationContext.getImageModel().getMax();
                 maxTextField.setText(Integer.toString(max));
+                applicationContext.getHistogrammController().setMax(max);
             }
         });
 

@@ -1,10 +1,7 @@
 package ch.fhnw.ima.sliceview.app;
 
 import ch.fhnw.ima.sliceview.logic.*;
-import ch.fhnw.ima.sliceview.logic.impl.SimpleGridData;
-import ch.fhnw.ima.sliceview.logic.impl.SimpleImageModel;
-import ch.fhnw.ima.sliceview.logic.impl.SimpleImageViewController;
-import ch.fhnw.ima.sliceview.logic.impl.SimpleSelectionInformation;
+import ch.fhnw.ima.sliceview.logic.impl.*;
 import ch.fhnw.ima.sliceview.present.image.ImageView;
 
 /**
@@ -20,6 +17,7 @@ public class ApplicationContext {
     private SelectionInformation selectionInformation;
     private ImageViewController imageViewController;
     private ImageView imageView;
+    private HistogrammController histogrammController;
 
     public ApplicationContext(String version, String name) {
         this.version = version;
@@ -27,6 +25,8 @@ public class ApplicationContext {
         gridData = new SimpleGridData();
         imageModel = new SimpleImageModel(gridData);
         selectionInformation = new SimpleSelectionInformation(gridData);
+        histogrammController = new SimpleHistogrammController(imageModel);
+
     }
 
     public String getVersion() {
@@ -55,5 +55,8 @@ public class ApplicationContext {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
         this.imageViewController = new SimpleImageViewController(this,imageView);
+    }
+    public HistogrammController getHistogrammController(){
+        return histogrammController;
     }
 }

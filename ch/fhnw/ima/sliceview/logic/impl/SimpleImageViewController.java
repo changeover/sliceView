@@ -12,7 +12,6 @@ public class SimpleImageViewController implements ImageViewController{
     private SelectionInformation selectionInformation;
     private ImageView imageView;
 
-
     public SimpleImageViewController(ApplicationContext applicationContext, ImageView imageView){
         this.selectionInformation = applicationContext.getSelectionInformation();
         this.imageView = imageView;
@@ -22,10 +21,12 @@ public class SimpleImageViewController implements ImageViewController{
         imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                int xCoordinate = imageView.getDataX((int)event.getX());
-                setXCoordinate(xCoordinate);
-                int yCoordinate = imageView.getDataY((int)event.getY());
-                setYCoordinate(yCoordinate);
+                if(imageView.isVisible()) {
+                    int xCoordinate = imageView.getDataX((int) event.getX());
+                    setXCoordinate(xCoordinate);
+                    int yCoordinate = imageView.getDataY((int) event.getY());
+                    setYCoordinate(yCoordinate);
+                }
             }
         });
         imageView.setOnMouseExited(new EventHandler<MouseEvent>() {
