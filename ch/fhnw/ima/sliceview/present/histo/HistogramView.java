@@ -1,10 +1,7 @@
 package ch.fhnw.ima.sliceview.present.histo;
 
 import ch.fhnw.ima.sliceview.app.ApplicationContext;
-import ch.fhnw.ima.sliceview.logic.GridDataListener;
-import ch.fhnw.ima.sliceview.logic.Histogram;
-import ch.fhnw.ima.sliceview.logic.ImageModelListener;
-import ch.fhnw.ima.sliceview.logic.SelectionInformationListener;
+import ch.fhnw.ima.sliceview.logic.*;
 import ch.fhnw.ima.sliceview.present.DrawingPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,17 +18,30 @@ class HistogramView extends DrawingPane {
         this.histogram = histogram;
 
         isLogarithmicScale = true;
+        GridData gridData = applicationContext.getGridData();
+        SelectionInformation selectionInformation = applicationContext.getSelectionInformation();
+        HistogrammController histogrammController = applicationContext.getHistogrammController();
 
-        applicationContext.getGridData().addListener(new GridDataListener(){
+        gridData.addListener(new GridDataListener(){
             public void dataChanged() {
                 repaint();
             }
         });
-        applicationContext.getSelectionInformation().addListener(new SelectionInformationListener() {
+        selectionInformation.addListener(new SelectionInformationListener() {
             @Override
             public void selectionInformationChanged() {
                 repaint();
-                drawBar(histogram.getBinIndex((int)applicationContext.getSelectionInformation().getValue()),Color.rgb(255,0,0));
+                drawBar(histogram.getBinIndex(histogrammController.getMin()),Color.BLACK,true);
+                drawBar(histogram.getBinIndex(histogrammController.getMax()),Color.BLACK,true);
+                drawBar(histogram.getBinIndex((int)selectionInformation.getValue()),Color.RED,false);
+            }
+        });
+        histogrammController.addListener(new HistogrammControllerListener() {
+            @Override
+            public void histogrammChanged() {
+                repaint();
+                drawBar(histogram.getBinIndex(histogrammController.getMin()),Color.BLACK,true);
+                drawBar(histogram.getBinIndex(histogrammController.getMax()),Color.BLACK,true);
             }
         });
     }
@@ -49,20 +59,26 @@ class HistogramView extends DrawingPane {
     protected void paint() {
         if (histogram.getBinCount() > 0) {
             for (int i = 0; i < histogram.getBinCount(); i++) {
-                drawBar(i, Color.grayRgb(170));
+                drawBar(i, Color.grayRgb(170),false);
             }
 
         }
     }
 
-    private void drawBar(int index, Paint fill) {
+    private void drawBar(int index, Paint fill, boolean border) {
         double height = getHeight();
         double width = getWidth();
         double binWidth = width / histogram.getBinCount();
 
         int x0 = (int) (index * binWidth);
         int x1 = (int) ((index +1) * binWidth);
-        int columnWidth = Math.max(x1-x0, 1);
+        int columnWidth = 0;
+        if(border) {
+            columnWidth = 2;
+        }
+        else{
+            columnWidth = Math.max(x1 - x0, 1);
+        }
 
         double count = histogram.getBin(index);
         double maxCount = histogram.getMaxCount();
@@ -71,8 +87,13 @@ class HistogramView extends DrawingPane {
             count = Math.log10(count);
             maxCount = Math.log10(maxCount);
         }
-
-        int columnHeight = (int) ((count / maxCount) * (height - BORDER_PERCENTAGE * height));
+        int columnHeight = 0;
+        if(border){
+            columnHeight = (int) height;
+        }
+        else{
+            columnHeight = (int) ((count / maxCount) * (height - BORDER_PERCENTAGE * height));
+        }
 
         g.fillRect(x0, height-columnHeight, columnWidth, columnHeight);
     }
