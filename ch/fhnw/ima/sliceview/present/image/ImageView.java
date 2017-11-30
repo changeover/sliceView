@@ -3,6 +3,7 @@ package ch.fhnw.ima.sliceview.present.image;
 import ch.fhnw.ima.sliceview.app.ApplicationContext;
 import ch.fhnw.ima.sliceview.logic.ImageModel;
 import ch.fhnw.ima.sliceview.logic.ImageModelListener;
+import ch.fhnw.ima.sliceview.logic.SelectionInformationListener;
 import ch.fhnw.ima.sliceview.present.DrawingPane;
 import javafx.scene.image.Image;
 
@@ -24,6 +25,14 @@ public class ImageView extends DrawingPane {
             public void imageModelChanged() {
                 ImageView.this.setVisible(true);
                 ImageView.this.repaint();
+            }
+        });
+        applicationContext.getSelectionInformation().addListener(new SelectionInformationListener() {
+            @Override
+            public void selectionInformationChanged() {
+                int value = (int)applicationContext.getSelectionInformation().getValue();
+                ImageView.this.repaint();
+                g.drawImage(applicationContext.getImageModel().getSelectionImage(value), imageX,imageY,imageWidth,imageHeight);
             }
         });
     }

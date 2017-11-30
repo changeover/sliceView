@@ -6,6 +6,7 @@ import ch.fhnw.ima.sliceview.logic.ImageModel;
 import ch.fhnw.ima.sliceview.logic.ImageModelListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,5 +101,18 @@ public class SimpleImageModel implements ImageModel {
             }
             image = writableImage;
         }
+    }
+    public Image getSelectionImage(int value){
+        WritableImage selectionImage = new WritableImage(gridData.getWidth(), gridData.getHeight());
+        int[] windowedValue = new int[1];
+        for (int row = 0; row < gridData.getHeight(); row++) {
+            for (int column = 0; column < gridData.getWidth(); column++) {
+                int valueGrid = gridData.getValue(column, row);
+                if(valueGrid == value){
+                    selectionImage.getPixelWriter().setColor(row,column, Color.RED);
+                }
+            }
+        }
+        return selectionImage;
     }
 }

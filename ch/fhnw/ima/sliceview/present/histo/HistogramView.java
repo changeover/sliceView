@@ -56,10 +56,12 @@ class HistogramView extends DrawingPane {
             @Override
             public void handle(MouseEvent event) {
                 repaint();
-                pointReleasedX = event.getX();
-                pointReleasedY = event.getY();
-                applicationContext.getHistogrammController().setStartBorder(pointClickX,getWidth());
-                applicationContext.getHistogrammController().setEndBorder(pointReleasedX,getWidth());
+                    pointReleasedX = event.getX();
+                    pointReleasedY = event.getY();
+                if(pointClickX>0&&pointReleasedX<=getWidth()) {
+                    applicationContext.getHistogrammController().setStartBorder(pointClickX, getWidth());
+                    applicationContext.getHistogrammController().setEndBorder(pointReleasedX, getWidth());
+                }
             }
         });
         canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
