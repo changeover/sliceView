@@ -3,8 +3,13 @@ package ch.fhnw.ima.sliceview.present.histo;
 import ch.fhnw.ima.sliceview.app.ApplicationContext;
 import ch.fhnw.ima.sliceview.logic.*;
 import ch.fhnw.ima.sliceview.present.DrawingPane;
+import javafx.event.EventHandler;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 
 class HistogramView extends DrawingPane {
     private static double BORDER_PERCENTAGE = 0.1;
@@ -12,16 +17,57 @@ class HistogramView extends DrawingPane {
     private ApplicationContext applicationContext;
     private Histogram histogram;
     private boolean isLogarithmicScale;
+    private double pointClickX;
+    private double pointClickY;
+    private double pointReleasedX;
+    private double pointReleasedY;
+    private Line line = new Line();
 
     HistogramView(ApplicationContext applicationContext, Histogram histogram) {
         this.applicationContext = applicationContext;
         this.histogram = histogram;
 
         isLogarithmicScale = true;
+
+        addListeners();
+        mouseLine();
+    }
+    private void mouseLine(){
+        Canvas canvas = g.getCanvas();
+        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                pointClickX = event.getX();
+                pointClickY = event.getY();
+                line.setStartX(pointClickX);
+                line.setStartY(pointClickY);
+            }
+        });
+        canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                line.setEndX(event.getX());
+                line.setEndY(event.getY());
+                repaint();
+                drawLine(g,line);
+            }
+        });
+        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                repaint();
+                pointReleasedX = event.getX();
+                pointReleasedY = event.getY();
+                applicationContext.getHistogrammController().setxStart(pointClickX,getWidth());
+                applicationContext.getHistogrammController().setxEnd(pointReleasedX,getWidth());
+            }
+        });
+    }
+
+    private void addListeners(){
         GridData gridData = applicationContext.getGridData();
         SelectionInformation selectionInformation = applicationContext.getSelectionInformation();
         HistogrammController histogrammController = applicationContext.getHistogrammController();
-
         gridData.addListener(new GridDataListener(){
             public void dataChanged() {
                 repaint();
@@ -44,6 +90,10 @@ class HistogramView extends DrawingPane {
                 drawBar(histogram.getBinIndex(histogrammController.getMax()),Color.BLACK,true);
             }
         });
+    }
+
+    private void drawLine(GraphicsContext g, Line line){
+        g.strokeLine(line.getStartX(),line.getStartY(),line.getEndX(),line.getEndY());
     }
 
     public boolean isLogarithmicScale() {

@@ -6,6 +6,7 @@ import ch.fhnw.ima.sliceview.logic.ImageModelListener;
 import ch.fhnw.ima.sliceview.logic.impl.SimpleHistogram;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,6 +37,9 @@ public class HistogramPanel extends StackPane {
         logCheckBox.setSelected(histogramView.isLogarithmicScale());
         logCheckBox.setOnAction(event -> histogramView.setLogarithmicScale(logCheckBox.isSelected()));
         controlPanel.getChildren().add(logCheckBox);
+
+        final Button resetMinMax = new Button("Grenzen zurücksetzen");
+        controlPanel.getChildren().add(resetMinMax);
 
         Region fillerRegion = new Region();
         controlPanel.getChildren().add(fillerRegion);
@@ -68,6 +72,17 @@ public class HistogramPanel extends StackPane {
             applicationContext.getHistogrammController().setMax(maxValue);
         });
         controlPanel.getChildren().add(maxTextField);
+
+        resetMinMax.setOnAction(event -> {
+            int highestMax = applicationContext.getHistogrammController().getHighestMax();
+            int lowestMin = applicationContext.getHistogrammController().getLowestMin();
+            maxTextField.setText(String.valueOf(highestMax));
+            applicationContext.getImageModel().setMax(highestMax);
+            applicationContext.getHistogrammController().setMax(highestMax);
+            minTextField.setText(String.valueOf(lowestMin));
+            applicationContext.getImageModel().setMin(lowestMin);
+            applicationContext.getHistogrammController().setMin(lowestMin);
+        });
 
         applicationContext.getImageModel().addListener(new ImageModelListener() {
             public void imageModelChanged() {
