@@ -54,13 +54,17 @@ public class SimpleHistogrammController implements HistogrammController {
             listener.histogrammChanged();
         }
     }
-    public void setxStart (double xStart, double windowWidth){
+    public void setStartBorder (double xStart, double windowWidth){
         this.xStart = xStart;
-        imageModel.setMin((int)(xStart*(highestMax-lowestMin)/windowWidth+lowestMin));
+        imageModel.setMin((int)calcValue(xStart,windowWidth));
     }
-    public void setxEnd (double xEnd, double windowWidth){
+    public void setEndBorder (double xEnd, double windowWidth){
         this.xEnd = xEnd;
-        imageModel.setMax((int)(xEnd*(highestMax-lowestMin)/windowWidth+lowestMin));
+        imageModel.setMax((int)calcValue(xEnd,windowWidth));
+    }
+    public double calcValue(double cursor, double windowWidth){
+        double value = cursor*(highestMax-lowestMin)/windowWidth+lowestMin;
+        return value;
     }
 
 

@@ -18,9 +18,11 @@ public interface HistogrammController {
 
     int getLowestMin();
 
-    void setxStart(double xStart, double windowWidth);
+    void setStartBorder(double xStart, double windowWidth);
 
-    void setxEnd (double xEnd, double windowWidth);
+    void setEndBorder (double xEnd, double windowWidth);
+
+    double calcValue(double cursor, double windowWidth);
 
     void addListener(HistogrammControllerListener listener);
 }

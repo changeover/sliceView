@@ -12,6 +12,8 @@ public interface SelectionInformation {
 
     void setValue();
 
+    void setValue(double value);
+
     double getValue();
 
     int getXCoordinate();

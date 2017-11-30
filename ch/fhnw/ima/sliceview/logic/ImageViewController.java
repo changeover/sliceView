@@ -1,6 +1,7 @@
 package ch.fhnw.ima.sliceview.logic;
 
-import java.util.List;
+import ch.fhnw.ima.sliceview.present.image.ImageView;
+
 
 public interface ImageViewController {
     void getCoordinates();
@@ -11,4 +12,5 @@ public interface ImageViewController {
 
     void setYCoordinate(int xCoordinate);
 
+    ImageView getImageView();
 }

@@ -58,8 +58,20 @@ class HistogramView extends DrawingPane {
                 repaint();
                 pointReleasedX = event.getX();
                 pointReleasedY = event.getY();
-                applicationContext.getHistogrammController().setxStart(pointClickX,getWidth());
-                applicationContext.getHistogrammController().setxEnd(pointReleasedX,getWidth());
+                applicationContext.getHistogrammController().setStartBorder(pointClickX,getWidth());
+                applicationContext.getHistogrammController().setEndBorder(pointReleasedX,getWidth());
+            }
+        });
+        canvas.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                repaint();
+                drawBorders();
+                double value = applicationContext.getHistogrammController().calcValue(event.getX(),getWidth());
+                value = Math.round(value);
+                if(applicationContext.getImageViewController().getImageView().isVisible()) {
+                    applicationContext.getSelectionInformation().setValue(value);
+                }
             }
         });
     }
@@ -77,8 +89,7 @@ class HistogramView extends DrawingPane {
             @Override
             public void selectionInformationChanged() {
                 repaint();
-                drawBar(histogram.getBinIndex(histogrammController.getMin()),Color.BLACK,true);
-                drawBar(histogram.getBinIndex(histogrammController.getMax()),Color.BLACK,true);
+                drawBorders();
                 drawBar(histogram.getBinIndex((int)selectionInformation.getValue()),Color.RED,false);
             }
         });
@@ -86,12 +97,14 @@ class HistogramView extends DrawingPane {
             @Override
             public void histogrammChanged() {
                 repaint();
-                drawBar(histogram.getBinIndex(histogrammController.getMin()),Color.BLACK,true);
-                drawBar(histogram.getBinIndex(histogrammController.getMax()),Color.BLACK,true);
+                drawBorders();
             }
         });
     }
-
+    private void drawBorders(){
+        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMin()),Color.BLACK,true);
+        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMax()),Color.BLACK,true);
+    }
     private void drawLine(GraphicsContext g, Line line){
         g.strokeLine(line.getStartX(),line.getStartY(),line.getEndX(),line.getEndY());
     }

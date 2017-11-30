@@ -37,6 +37,11 @@ public class SimpleSelectionInformation implements SelectionInformation{
         fireDataChanged();
     }
 
+    public void setValue(double value){
+        this.value = value;
+        fireDataChanged();
+    }
+
     public double getValue(){
         return this.value;
     }

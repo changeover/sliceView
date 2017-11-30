@@ -48,4 +48,7 @@ public class SimpleImageViewController implements ImageViewController{
         setYCoordinate(coordinates);
 
     }
+    public ImageView getImageView(){
+        return this.imageView;
+    }
 }
