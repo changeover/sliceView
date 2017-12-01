@@ -19,7 +19,15 @@ public class SimpleHistogrammController implements HistogrammController {
     public SimpleHistogrammController(ImageModel imageModel){
         listeners = new ArrayList<>();
         this.imageModel = imageModel;
+        imageModel.addListener(new ImageModelListener() {
+            @Override
+            public void imageModelChanged() {
+                setLowestMin(imageModel.getMin());
+                setHighestMax(imageModel.getMax());
+            }
+        });
     }
+
 
     public void setMin(int min) {
         this.min = min;

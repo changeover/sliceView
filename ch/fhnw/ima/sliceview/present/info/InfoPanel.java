@@ -57,7 +57,12 @@ public class InfoPanel extends StackPane {
 
     private void refreshDataInformation() {
         nameLabel.setText(applicationContext.getGridData().getName());
-        coordinateLabel.setText(applicationContext.getSelectionInformation().getCoordinates().toString());
+        if (applicationContext.getSelectionInformation().getXCoordinate() <= -1) {
+            coordinateLabel.setText("[- -]");
+        }
+        else{
+            coordinateLabel.setText(applicationContext.getSelectionInformation().getCoordinates().toString());
+        }
         value = applicationContext.getSelectionInformation().getValue();
         startValue = applicationContext.getSelectionInformation().getStartValue();
         endValue = applicationContext.getSelectionInformation().getEndValue();
@@ -67,7 +72,12 @@ public class InfoPanel extends StackPane {
         }
         else {
             lableValueRange.setText("Value:");
-            valueLabel.setText(value.toString());
+            if(value==-12334567){
+                valueLabel.setText("-");
+            }
+            else {
+                valueLabel.setText(value.toString());
+            }
         }
     }
 

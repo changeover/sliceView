@@ -58,7 +58,7 @@ class HistogramView extends DrawingPane {
                 repaint();
                     pointReleasedX = event.getX();
                     pointReleasedY = event.getY();
-                if(pointClickX>0&&pointReleasedX<=getWidth()) {
+                if(pointClickX>0&&pointReleasedX<=getWidth()&&pointReleasedX>pointClickX) {
                     applicationContext.getHistogrammController().setStartBorder(pointClickX, getWidth());
                     applicationContext.getHistogrammController().setEndBorder(pointReleasedX, getWidth());
                 }
@@ -96,12 +96,12 @@ class HistogramView extends DrawingPane {
             public void selectionInformationChanged() {
                 repaint();
                 drawBorders();
-                drawBar(histogram.getBinIndex((int)selectionInformation.getValue()),Color.RED,false);
+                drawBar(histogram.getBinIndex((int)selectionInformation.getValue()),Color.RED,false,true);
             }
             public void rangeInformationChanged(){
                 repaint();
                 drawBorders();
-                drawBar(histogram.getBinIndex((int)selectionInformation.getStartValue()),Color.RED,false);
+                drawBar(histogram.getBinIndex((int)selectionInformation.getStartValue()),Color.BLUE,false,true);
             }
         });
         histogrammController.addListener(new HistogrammControllerListener() {
@@ -113,8 +113,8 @@ class HistogramView extends DrawingPane {
         });
     }
     private void drawBorders(){
-        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMin()),Color.BLACK,true);
-        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMax()),Color.BLACK,true);
+        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMin()),Color.BLACK,true,true);
+        drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMax()),Color.BLACK,true,false);
     }
 
     public boolean isLogarithmicScale() {
@@ -130,13 +130,13 @@ class HistogramView extends DrawingPane {
     protected void paint() {
         if (histogram.getBinCount() > 0) {
             for (int i = 0; i < histogram.getBinCount(); i++) {
-                drawBar(i, Color.grayRgb(170),false);
+                drawBar(i, Color.grayRgb(170),false,true);
             }
 
         }
     }
 
-    private void drawBar(int index, Paint fill, boolean border) {
+    private void drawBar(int index, Paint fill, boolean border, boolean start) {
         double height = getHeight();
         double width = getWidth();
         double binWidth = width / histogram.getBinCount();
@@ -165,7 +165,11 @@ class HistogramView extends DrawingPane {
         else{
             columnHeight = (int) ((count / maxCount) * (height - BORDER_PERCENTAGE * height));
         }
-
-        g.fillRect(x0, height-columnHeight, columnWidth, columnHeight);
+        if(start) {
+            g.fillRect(x0, height - columnHeight, columnWidth, columnHeight);
+        }
+        else{
+            g.fillRect(x1-2, height - columnHeight, columnWidth, columnHeight);
+        }
     }
 }

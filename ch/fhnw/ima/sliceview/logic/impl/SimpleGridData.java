@@ -37,7 +37,7 @@ public class SimpleGridData implements GridData {
 
     public int getValue(int x, int y) {
         if(x==-1 || y==-1){
-            return 0;
+            return -12334567;
         }
         return values[y][x];
     }

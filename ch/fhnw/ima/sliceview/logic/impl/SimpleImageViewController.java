@@ -21,7 +21,7 @@ public class SimpleImageViewController implements ImageViewController{
         imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(imageView.isVisible()) {
+                if(imageView.isVisible()){
                     int xCoordinate = imageView.getDataX((int) event.getX());
                     setXCoordinate(xCoordinate);
                     int yCoordinate = imageView.getDataY((int) event.getY());
