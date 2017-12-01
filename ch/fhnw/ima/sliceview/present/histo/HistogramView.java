@@ -46,10 +46,10 @@ class HistogramView extends DrawingPane {
         canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                line.setEndX(event.getX());
-                line.setEndY(event.getY());
-                repaint();
-                drawLine(g,line);
+                if(event.getX()<=getWidth()&&event.getX()>=pointClickX) {
+                    applicationContext.getHistogrammController().setStartBorder(pointClickX, getWidth());
+                    applicationContext.getHistogrammController().setEndBorder(event.getX(), getWidth());
+                }
             }
         });
         canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -70,9 +70,14 @@ class HistogramView extends DrawingPane {
                 repaint();
                 drawBorders();
                 double value = applicationContext.getHistogrammController().calcValue(event.getX(),getWidth());
-                value = Math.round(value);
+                int binIndex = histogram.getBinIndex((int)value);
+                double dataMin = applicationContext.getGridData().getMinValue();
+                double dataMax = applicationContext.getGridData().getMaxValue();
+                double binWidth = (dataMax - dataMin)/(double)histogram.getBinCount();
+                double startValue = dataMin + (binWidth*binIndex);
+                double endValue = dataMin + (binWidth*(binIndex+1));
                 if(applicationContext.getImageViewController().getImageView().isVisible()) {
-                    applicationContext.getSelectionInformation().setValue(value);
+                    applicationContext.getSelectionInformation().setRange(startValue,endValue);
                 }
             }
         });
@@ -88,11 +93,15 @@ class HistogramView extends DrawingPane {
             }
         });
         selectionInformation.addListener(new SelectionInformationListener() {
-            @Override
             public void selectionInformationChanged() {
                 repaint();
                 drawBorders();
                 drawBar(histogram.getBinIndex((int)selectionInformation.getValue()),Color.RED,false);
+            }
+            public void rangeInformationChanged(){
+                repaint();
+                drawBorders();
+                drawBar(histogram.getBinIndex((int)selectionInformation.getStartValue()),Color.RED,false);
             }
         });
         histogrammController.addListener(new HistogrammControllerListener() {
@@ -106,9 +115,6 @@ class HistogramView extends DrawingPane {
     private void drawBorders(){
         drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMin()),Color.BLACK,true);
         drawBar(histogram.getBinIndex(applicationContext.getHistogrammController().getMax()),Color.BLACK,true);
-    }
-    private void drawLine(GraphicsContext g, Line line){
-        g.strokeLine(line.getStartX(),line.getStartY(),line.getEndX(),line.getEndY());
     }
 
     public boolean isLogarithmicScale() {

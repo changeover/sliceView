@@ -51,4 +51,6 @@ public interface ImageModel {
     void addListener(ImageModelListener listener);
 
     Image getSelectionImage(int value);
+
+    Image getSelectionImage(int startValue, int endValue);
 }

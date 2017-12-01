@@ -11,6 +11,8 @@ public class SimpleSelectionInformation implements SelectionInformation{
     private double value = 0.00;
     private List<SelectionInformationListener> listeners;
     private GridData gridData;
+    private double startValue = 0.00;
+    private double endValue = 0.00;
 
     public SimpleSelectionInformation(GridData gridData){
         this.gridData = gridData;
@@ -64,6 +66,19 @@ public class SimpleSelectionInformation implements SelectionInformation{
         for (SelectionInformationListener listener : listeners) {
             listener.selectionInformationChanged();
         }
+    }
+    public void setRange(double startValue, double endValue){
+        this.startValue = startValue;
+        this.endValue = endValue;
+        for(SelectionInformationListener listener:listeners){
+            listener.rangeInformationChanged();
+        }
+    }
+    public double getStartValue(){
+        return Math.round(this.startValue);
+    }
+    public double getEndValue(){
+        return Math.round(this.endValue);
     }
     public void addListener(SelectionInformationListener listener){
         listeners.add(listener);

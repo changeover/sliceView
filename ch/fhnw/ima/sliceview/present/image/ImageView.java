@@ -34,6 +34,12 @@ public class ImageView extends DrawingPane {
                 ImageView.this.repaint();
                 g.drawImage(applicationContext.getImageModel().getSelectionImage(value), imageX,imageY,imageWidth,imageHeight);
             }
+            public void rangeInformationChanged(){
+                double startValue = applicationContext.getSelectionInformation().getStartValue();
+                double endValue = applicationContext.getSelectionInformation().getEndValue();
+                ImageView.this.repaint();
+                g.drawImage(applicationContext.getImageModel().getSelectionImage((int)startValue, (int)endValue), imageX,imageY,imageWidth,imageHeight);
+            }
         });
     }
 

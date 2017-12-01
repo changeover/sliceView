@@ -104,12 +104,23 @@ public class SimpleImageModel implements ImageModel {
     }
     public Image getSelectionImage(int value){
         WritableImage selectionImage = new WritableImage(gridData.getWidth(), gridData.getHeight());
-        int[] windowedValue = new int[1];
         for (int row = 0; row < gridData.getHeight(); row++) {
             for (int column = 0; column < gridData.getWidth(); column++) {
                 int valueGrid = gridData.getValue(column, row);
                 if(valueGrid == value){
-                    selectionImage.getPixelWriter().setColor(row,column, Color.RED);
+                    selectionImage.getPixelWriter().setColor(column,row, Color.YELLOW);
+                }
+            }
+        }
+        return selectionImage;
+    }
+    public Image getSelectionImage(int startValue, int endValue){
+        WritableImage selectionImage = new WritableImage(gridData.getWidth(), gridData.getHeight());
+        for (int row = 0; row < gridData.getHeight(); row++) {
+            for (int column = 0; column < gridData.getWidth(); column++) {
+                int valueGrid = gridData.getValue(column, row);
+                if(valueGrid>=startValue&&valueGrid<=endValue){
+                    selectionImage.getPixelWriter().setColor(column,row, Color.YELLOW);
                 }
             }
         }

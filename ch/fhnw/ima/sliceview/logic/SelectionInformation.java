@@ -20,7 +20,13 @@ public interface SelectionInformation {
 
     int getYCoordinate();
 
+    void setRange(double startValue, double endValue);
+
     List<Integer> getCoordinates();
+
+    double getStartValue();
+
+    double getEndValue();
 
     void addListener(SelectionInformationListener listener);
 }
